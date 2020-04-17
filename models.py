@@ -10,17 +10,15 @@ class Organization(models.Model):
 	state = models.CharField(max_length=20)
 	zipcode = models.CharField(max_length=20)
 	phone = models.CharField(max_length=20)
-
 	def __str__(self):
-		return self.name
+		return self.orgName
 
 class Office(models.Model):
 	officeName = models.CharField(max_length=20)
 	officeCode = models.CharField(max_length=20)
 	attribution = models.CharField(max_length=20)
-
 	def __str__(self):
-		return self.officeName.officeCode.attribution
+		return self.officeName
 
 class Service(models.Model):
 	serviceCode = models.CharField(max_length=20)
@@ -28,13 +26,11 @@ class Service(models.Model):
 	description = models.CharField(max_length=144)
 	premium = models.CharField(max_length=20)
 	allocation = models.CharField(max_length=20)
-
 	def __str__(self):
-		return self.name		
+		return self.serviceName
 
 class Subscriber(models.Model):
 	subID = models.CharField(max_length=20)
-	serviceCode = models.ForeignKey(Service, on_delete=models.CASCADE)
 	subRequestDate = models.DateField()
 	subStartDate = models.DateField()
 	subEndDate = models.DateField()
@@ -42,18 +38,16 @@ class Subscriber(models.Model):
 	subType = models.CharField(max_length=20)
 	userName = models.CharField(max_length=20)
 	beneficiaryID = models.CharField(max_length=20)
-
 	def __str__(self):
-		return self.name		
+		return self.subID
 
 class Officer(models.Model):
 	subID = models.CharField(max_length=20)
 	officeCode = models.ForeignKey(Office, on_delete=models.CASCADE)
 	startDate = models.DateField()
 	endDate = models.DateField()
-
 	def __str__(self):
-		return self.name
+		return self.subID
 
 class OrganizationMember(models.Model):
 	orgCode = models.ForeignKey(Organization, on_delete=models.CASCADE)
@@ -65,19 +59,34 @@ class OrganizationMember(models.Model):
 	y = 'yes'
 	n = 'no'
 	delegate = (
-		(y, 'yes'),
-		(n, 'no')
+	(y, 'yes'),
+	(n, 'no')
 	)
 	isdelegate = models.CharField(max_length=10, choices=delegate,)
-
 	def __str__(self):
-		return self.name	
+		return self.orgCode
+
+class UserInfo(models.Model):
+	userName = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
+	fName = models.CharField(max_length=20)
+	mName = models.CharField(max_length=20)
+	lName = models.CharField(max_length=20)
+	email = models.CharField(max_length=20)
+	address1 = models.CharField(max_length=20)
+	address2 = models.CharField(max_length=20)
+	city = models.CharField(max_length=20)
+	state = models.CharField(max_length=20)
+	zipcode = models.CharField(max_length=20)
+	empName = models.CharField(max_length=20)
+	def _str_(self):
+		return self.userName
+
+class SubscriptionType(models.Model):
+	subName = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
 
 
-
-
-
-
-
-
-
+class TrasferredSubscription(models.Model):
+	transferID = models.CharField(max_length=20)
+	transferFrom = models.CharField(max_length=20)
+	transferTo = models.CharField(max_length=20)
+	requestDate = models.CharField(max_length=20)
